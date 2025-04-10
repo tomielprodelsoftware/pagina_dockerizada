@@ -1,0 +1,48 @@
+services:
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: zephyr
+      MYSQL_USER: tomi
+      MYSQL_PASSWORD: tomi
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+
+  backend:
+    build:
+      context: ./2024-backend-Inaki-Gongora
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=tomi
+      - DB_PASSWORD=tu_clave
+      - DB_NAME=zephyr
+      - DB_PORT=3306
+
+# frontend:
+  #   build:
+  #     context: ./2024-frontend-Inaki-Gongora
+  #   restart: always
+  #   ports:
+  #     - "3001:3000"  # Puerto local:puerto contenedor
+  #   depends_on:
+  #     - backend
+
+  
+
